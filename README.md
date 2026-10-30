@@ -413,12 +413,13 @@ Isi folder `dist/` sudah berupa file statis yang siap di-upload: `index.html`, f
 | [Vercel](https://vercel.com) | Pilih **Add New > Project**, lalu import repo-nya. Vercel otomatis mengenali Vite (build `npm run build`, output `dist`), jadi tinggal klik **Deploy**. |
 | [Netlify](https://www.netlify.com) | Import repo, lalu isi build command `npm run build` dan publish directory `dist`. Kalau tidak pakai Git, seret saja folder `dist/` ke [Netlify Drop](https://app.netlify.com/drop). |
 | [Cloudflare Pages](https://pages.cloudflare.com) | Sambungkan repo, lalu isi build command `npm run build` dan output directory `dist`. |
+| [GitHub Pages](https://pages.github.com) | Sekali saja: buka **Settings > Pages** di repo, lalu pilih Source **GitHub Actions**. Setelah itu setiap push ke `main` otomatis di-build dan di-deploy oleh `.github/workflows/deploy.yml`. |
 | Hosting statis lain | Upload isi folder `dist/` ke root domain (cPanel, Nginx, dan sejenisnya). |
 
 Tidak perlu aturan rewrite atau redirect untuk SPA, karena semua navigasi pakai anchor `#` di satu halaman `index.html`.
 
 > [!NOTE]
-> Kalau deploy ke subpath, misalnya GitHub Pages di `arisyudapratama.github.io/portfolio-2/`, tambahkan `base: '/portfolio-2/'` di `vite.config.js`. Vite akan menyesuaikan URL aset di HTML dan CSS, tapi tidak untuk path yang ditulis sebagai string di `src/data.js` (`image` dan `photo`). Path itu juga harus diawali `/portfolio-2/`.
+> GitHub Pages menaruh situs di subpath, misalnya `arisyudapratama.github.io/portfolio-2/`. Workflow-nya sudah mengisi `base` Vite otomatis, jadi URL aset di HTML dan CSS ikut menyesuaikan. Path yang ditulis sebagai string di `src/data.js` (`image` dan `photo`) tidak ikut, jadi untuk GitHub Pages tulis tanpa `/` di depan, misalnya `'projects/kasir.webp'`. Path seperti itu jalan di root maupun subpath.
 
 ## Di balik layar
 
