@@ -1,0 +1,422 @@
+.lanyard {
+  --strap: 96px; /* cukup panjang supaya lipatan tali saat kartu dibalik tetap terlihat di HP */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Bagian yang berayun: tali (SVG) + badge. Saat kartu ditarik, fisika di IdCard.jsx mengambil alih
+   (data-physics) dan ayunan CSS dimatikan; setelah kartu tenang ayunan mulai lagi dari 0°. */
+.lanyard__swing {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: var(--strap);
+  transform-origin: 50% 0;
+  animation: swing 6s infinite;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.lanyard__swing:hover {
+  animation-play-state: paused;
+}
+
+.lanyard__swing[data-physics] {
+  animation: none;
+}
+
+/* Mulai dan berakhir di tengah (0°) supaya fisika bisa menyerahkan kembali tanpa lompatan */
+@keyframes swing {
+  0% {
+    rotate: 0deg;
+    animation-timing-function: ease-out;
+  }
+  25% {
+    rotate: 3deg;
+    animation-timing-function: ease-in-out;
+  }
+  75% {
+    rotate: -3deg;
+    animation-timing-function: ease-in;
+  }
+  100% {
+    rotate: 0deg;
+  }
+}
+
+.lanyard__rope {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.lanyard__shine {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.14);
+  stroke-width: 12px;
+}
+
+.lanyard__text {
+  font: 500 10px var(--font-mono);
+  letter-spacing: 0.25em;
+  fill: rgba(255, 255, 255, 0.75);
+  dominant-baseline: central;
+}
+
+.lanyard__badge {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform-origin: 50% 0;
+}
+
+.lanyard__swing[data-physics] .lanyard__badge {
+  will-change: transform;
+}
+
+.lanyard[data-draggable] .idcard {
+  cursor: grab;
+  /* geser atas/bawah tetap scroll halaman, geser ke samping mengayun kartu; zoom dua jari tetap bisa */
+  touch-action: pan-y pinch-zoom;
+}
+
+.idcard[data-dragging] {
+  cursor: grabbing;
+}
+
+.lanyard__clip {
+  position: relative;
+  z-index: 2;
+  width: 46px;
+  height: 22px;
+  margin-bottom: -12px;
+  border-radius: 6px 6px 12px 12px;
+  background: linear-gradient(180deg, #e2e8f0, #64748b);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    0 6px 14px rgba(0, 0, 0, 0.45);
+}
+
+.idcard {
+  --card-w: 240px;
+  --thick: 5px; /* tebal kartu (plastik badge) */
+  position: relative;
+  width: var(--card-w);
+  aspect-ratio: 5 / 7;
+  border-radius: 22px;
+  perspective: 900px;
+}
+
+/* Putaran 3D kecil yang ikut ayunan idle (sefase, berhenti bersama saat hover).
+   Saat fisika mengambil alih, sudutnya dipindah ke .idcard__turn lalu animasi ini dimatikan. */
+.idcard__sway {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  animation: sway 6s infinite;
+}
+
+.lanyard__swing:hover .idcard__sway {
+  animation-play-state: paused;
+}
+
+.lanyard__swing[data-physics] .idcard__sway {
+  animation: none;
+}
+
+@keyframes sway {
+  0% {
+    rotate: y 0deg;
+    animation-timing-function: ease-out;
+  }
+  25% {
+    rotate: y 5deg;
+    animation-timing-function: ease-in-out;
+  }
+  75% {
+    rotate: y -5deg;
+    animation-timing-function: ease-in;
+  }
+  100% {
+    rotate: y 0deg;
+  }
+}
+
+.idcard__inner {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transition: transform 0.6s var(--ease);
+}
+
+/* Putaran balik kartu digerakkan JS supaya sinkron dengan pilinan tali; tilt hover tetap di .idcard__inner */
+.idcard__turn {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 0; /* miring (pitch) bertumpu di tepi atas, tempat klip */
+  transform-style: preserve-3d;
+}
+
+.idcard__face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 26px 20px 18px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 22px;
+  background:
+    radial-gradient(120% 70% at 100% 0%, rgba(44, 103, 237, 0.35), transparent 60%),
+    linear-gradient(165deg, #121a36, #070b1a 70%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 40px 80px -30px rgba(0, 0, 0, 0.9),
+    0 0 60px -20px rgba(44, 103, 237, 0.55);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  text-align: left;
+}
+
+.idcard__front {
+  transform: translateZ(calc(var(--thick) / 2));
+}
+
+.idcard__back {
+  transform: rotateY(180deg) translateZ(calc(var(--thick) / 2));
+}
+
+/* Tepi kartu: strip setebal --thick di sisi kiri/kanan, hanya terlihat saat kartu menyamping */
+.idcard__edge {
+  position: absolute;
+  top: 22px;
+  bottom: 22px;
+  left: calc(50% - var(--thick) / 2);
+  width: var(--thick);
+  background: linear-gradient(90deg, #1b2440, #5a6a96 50%, #1b2440); /* tepi plastik menangkap cahaya */
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.idcard__edge--l {
+  transform: rotateY(-90deg) translateZ(calc(var(--card-w) / 2));
+}
+
+.idcard__edge--r {
+  transform: rotateY(90deg) translateZ(calc(var(--card-w) / 2));
+}
+
+/* Kilap laminasi: bergeser saat kartu berputar (--sheen dari IdCard.jsx), seperti pantulan lampu */
+.idcard__sheen {
+  position: absolute;
+  inset: 0 -60%;
+  background: linear-gradient(
+    105deg,
+    transparent 38%,
+    rgba(255, 255, 255, 0.06) 45%,
+    rgba(255, 255, 255, 0.13) 50%,
+    rgba(255, 255, 255, 0.06) 55%,
+    transparent 62%
+  );
+  transform: translateX(calc(var(--sheen, 0%) - 10%));
+  pointer-events: none;
+}
+
+/* Foil hologram + kilap yang mengikuti pointer */
+.idcard__front::before,
+.idcard__front::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.idcard__front::before {
+  background: linear-gradient(
+    115deg,
+    transparent 35%,
+    rgba(0, 240, 255, 0.14) 45%,
+    rgba(124, 58, 237, 0.16) 52%,
+    rgba(44, 103, 237, 0.14) 60%,
+    transparent 70%
+  );
+  background-size: 250% 250%;
+  background-position: var(--px, 30%) var(--py, 30%);
+  mix-blend-mode: screen;
+  transition: background-position 0.6s var(--ease);
+}
+
+.idcard__front::after {
+  background: radial-gradient(circle at var(--px, 30%) var(--py, 10%), rgba(255, 255, 255, 0.16), transparent 45%);
+}
+
+.idcard__slot {
+  align-self: center;
+  width: 54px;
+  height: 8px;
+  margin: -12px 0 16px;
+  border-radius: 99px;
+  background: rgba(0, 0, 0, 0.55);
+  box-shadow:
+    inset 0 1px 2px rgba(0, 0, 0, 0.8),
+    0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.idcard__top,
+.idcard__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font: 500 0.6875rem/1 var(--font-mono);
+  color: var(--muted);
+}
+
+.idcard__top .brand {
+  font-size: 0.75rem;
+  color: var(--text);
+}
+
+.idcard__avatar {
+  display: grid;
+  place-items: center;
+  width: 92px;
+  height: 92px;
+  margin: 22px 0 18px;
+  overflow: hidden;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 25%, #3a74f5, #10204f 70%);
+  box-shadow:
+    0 0 0 3px #070b1a,
+    0 0 0 5px rgba(0, 240, 255, 0.55);
+  font: 700 2rem/1 var(--font-display);
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+
+.idcard__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.idcard__name,
+.idcard__back-title {
+  font: 600 1.35rem/1.15 var(--font-display);
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+
+.idcard__role {
+  margin-top: 4px;
+  color: var(--accent-3);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.idcard__loc {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.idcard__barcode {
+  height: 26px;
+  margin-top: auto;
+  opacity: 0.5;
+  background: repeating-linear-gradient(
+    90deg,
+    #e2e8f0 0 2px,
+    transparent 2px 4px,
+    #e2e8f0 4px 5px,
+    transparent 5px 8px,
+    #e2e8f0 8px 11px,
+    transparent 11px 13px
+  );
+}
+
+.idcard__foot {
+  margin-top: 10px;
+}
+
+.idcard__back-title {
+  margin-top: 8px;
+}
+
+.idcard__mail {
+  margin-top: 8px;
+  font: 500 0.8125rem/1.3 var(--font-mono);
+  color: var(--accent-2);
+  overflow-wrap: anywhere;
+}
+
+.idcard__list {
+  display: grid;
+  gap: 10px;
+  margin-top: 20px;
+  color: var(--text);
+  font-size: 0.875rem;
+}
+
+.idcard__list span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.idcard__dots {
+  flex: 1;
+  margin: 16px -20px 0;
+  background: radial-gradient(circle, rgba(148, 163, 184, 0.35) 1.2px, transparent 1.5px) 0 0 / 12px 12px;
+  -webkit-mask-image: linear-gradient(transparent, #000 40%, transparent);
+  mask-image: linear-gradient(transparent, #000 40%, transparent);
+}
+
+.lanyard__hint {
+  margin-top: 18px;
+  font: 500 0.75rem/1 var(--font-mono);
+  color: var(--muted);
+}
+
+.lanyard__hint-touch {
+  display: none;
+}
+
+@media (hover: none) {
+  .lanyard__hint-mouse {
+    display: none;
+  }
+  .lanyard__hint-touch {
+    display: inline;
+  }
+}
+
+@media (min-width: 900px) {
+  .lanyard {
+    --strap: clamp(140px, 24vh, 240px);
+  }
+  .idcard {
+    --card-w: 300px;
+  }
+  .idcard__face {
+    padding: 30px 24px 22px;
+  }
+  .idcard__name,
+  .idcard__back-title {
+    font-size: 1.6rem;
+  }
+  .idcard__avatar {
+    width: 112px;
+    height: 112px;
+    font-size: 2.4rem;
+  }
+}

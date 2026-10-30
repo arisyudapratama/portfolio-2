@@ -1,0 +1,237 @@
+.hero {
+  position: relative;
+  display: grid;
+  min-height: 100svh;
+  padding-block: 120px 96px;
+  overflow: hidden;
+  isolation: isolate;
+  /* Fallback kalau WebGL tidak tersedia; tertutup canvas saat shader jalan. */
+  background:
+    radial-gradient(55% 45% at 78% 22%, rgba(44, 103, 237, 0.32), transparent 70%),
+    radial-gradient(35% 35% at 92% 70%, rgba(0, 240, 255, 0.1), transparent 70%),
+    var(--bg);
+}
+
+.hero__bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+
+/* Scrim supaya teks tetap terbaca di atas aurora */
+.hero__bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(5, 5, 16, 0.55), rgba(5, 5, 16, 0.3) 55%, var(--bg));
+}
+
+.shader {
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 1.2s var(--ease);
+}
+
+.shader[data-state='static'],
+.shader[data-state='running'] {
+  opacity: 1;
+}
+
+.hero__grid {
+  display: grid;
+  align-items: center;
+  gap: 56px;
+}
+
+.hero__copy {
+  max-width: 640px;
+}
+
+.hero__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 14px 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: rgba(5, 5, 16, 0.5);
+  font-size: 0.875rem;
+}
+
+.hero__dot {
+  position: relative;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22c55e;
+}
+
+/* transform + opacity saja (compositor), bukan box-shadow yang repaint tiap frame */
+.hero__dot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: inherit;
+  animation: pulse 2.4s var(--ease) infinite;
+}
+
+@keyframes pulse {
+  from {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  70%,
+  to {
+    opacity: 0;
+    transform: scale(3);
+  }
+}
+
+.hero__title {
+  margin-top: 24px;
+  font-size: clamp(2.6rem, 7vw, 5.5rem);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+}
+
+.hero__line {
+  display: block;
+}
+
+.hero__word {
+  display: inline-block;
+}
+
+.hero__role {
+  min-height: 1.5em;
+  margin-top: 20px;
+  font: 500 clamp(1rem, 2vw, 1.25rem) / 1.5 var(--font-mono);
+  color: var(--accent-3);
+}
+
+.hero__caret {
+  display: inline-block;
+  width: 0.55em;
+  height: 1.1em;
+  margin-left: 3px;
+  vertical-align: -0.18em;
+  background: var(--accent-2);
+  animation: blink 1.1s steps(1) infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.hero__intro {
+  max-width: 52ch;
+  margin-top: 20px;
+  color: var(--muted);
+  font-size: 1.075rem;
+}
+
+.hero__cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+.hero__social {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 28px;
+}
+
+.hero__social .chip {
+  min-height: 44px;
+  background: rgba(5, 5, 16, 0.4);
+  transition:
+    color 0.2s var(--ease),
+    border-color 0.2s var(--ease);
+}
+
+.hero__social .chip:hover {
+  border-color: var(--border-strong);
+  color: var(--text);
+}
+
+.hero__card {
+  display: flex;
+  justify-content: center;
+}
+
+.hero__scroll {
+  position: absolute;
+  bottom: 28px;
+  left: 50%;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  translate: -50% 0;
+  font: 500 0.75rem/1 var(--font-mono);
+  color: var(--muted);
+}
+
+.hero__scroll-line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(var(--accent-2), transparent);
+  transform-origin: 50% 0;
+  animation: scroll-line 2.2s var(--ease) infinite;
+}
+
+@keyframes scroll-line {
+  from {
+    transform: scaleY(0);
+  }
+  60%,
+  to {
+    transform: scaleY(1);
+    opacity: 0;
+  }
+}
+
+/* Animasi masuk: satu urutan saat halaman dibuka. Delay dijaga pendek karena elemen
+   ber-opacity 0 belum dihitung sebagai LCP sampai mulai terlihat. */
+.rise {
+  animation: rise 0.7s var(--ease) both;
+  animation-delay: calc(var(--i, 0) * 50ms);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.6em);
+  }
+}
+
+@media (min-width: 900px) {
+  .hero__bg::after {
+    background:
+      linear-gradient(90deg, rgba(5, 5, 16, 0.72), rgba(5, 5, 16, 0.2) 55%, transparent 75%),
+      linear-gradient(0deg, var(--bg), transparent 28%);
+  }
+  .hero__grid {
+    grid-template-columns: 1.1fr 0.9fr;
+  }
+  /* Tarik kolom kartu ke atas supaya tali lanyard "menggantung" tepat dari bawah navbar (72px),
+     bukan menimpa link navbar */
+  .hero__card {
+    align-self: start;
+    margin-top: -48px;
+  }
+}
+
+@media (min-width: 900px) and (min-height: 700px) {
+  .hero__scroll {
+    display: flex;
+  }
+}

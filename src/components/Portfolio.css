@@ -1,0 +1,687 @@
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 4px;
+  width: fit-content;
+  max-width: 100%;
+  margin-bottom: 40px;
+  padding: 4px;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+  scrollbar-width: none;
+}
+
+.tabs [role='tab'] {
+  flex-shrink: 0;
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: 10px;
+  color: var(--muted);
+  font-weight: 500;
+  white-space: nowrap;
+  transition:
+    color 0.2s var(--ease),
+    background-color 0.2s var(--ease);
+}
+
+.tabs [role='tab']:hover {
+  color: var(--text);
+}
+
+.tabs [role='tab'][aria-selected='true'] {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* HP: ketiga tab selalu terlihat (label boleh turun baris) daripada tersembunyi di luar layar */
+@media (max-width: 639px) {
+  .tabs {
+    width: 100%;
+    overflow: visible;
+  }
+  .tabs [role='tab'] {
+    flex: 1 1 auto;
+    padding: 8px 10px;
+    font-size: 0.9rem;
+    line-height: 1.2;
+    white-space: normal;
+  }
+}
+
+/* Filter */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 28px;
+}
+
+.filter {
+  min-height: 44px;
+  transition:
+    color 0.2s var(--ease),
+    border-color 0.2s var(--ease),
+    background-color 0.2s var(--ease);
+}
+
+.filter:hover {
+  color: var(--text);
+}
+
+.filter[aria-pressed='true'] {
+  border-color: rgba(96, 165, 250, 0.6);
+  background: rgba(44, 103, 237, 0.16);
+  color: var(--text);
+}
+
+/* Bento grid */
+.bento {
+  display: grid;
+  gap: 16px;
+}
+
+.bento__item {
+  display: flex;
+}
+
+.project-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--surface);
+  text-align: left;
+  transition:
+    border-color 0.3s var(--ease),
+    transform 0.3s var(--ease);
+}
+
+/* Spotlight mengikuti pointer */
+.project-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  opacity: 0;
+  background: radial-gradient(
+    380px circle at var(--mx, 50%) var(--my, 50%),
+    color-mix(in srgb, var(--accent-p) 20%, transparent),
+    transparent 45%
+  );
+  transition: opacity 0.3s var(--ease);
+  pointer-events: none;
+}
+
+@media (hover: hover) {
+  .project-card:hover {
+    border-color: color-mix(in srgb, var(--accent-p) 45%, transparent);
+    transform: translateY(-3px);
+  }
+  .project-card:hover::before {
+    opacity: 1;
+  }
+  .project-card:hover .cover {
+    scale: 1.04;
+  }
+}
+
+.project-card__media {
+  display: block;
+  overflow: hidden;
+}
+
+.project-card__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px 22px 22px;
+}
+
+.project-card__meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--muted);
+  font: 500 0.8125rem/1.3 var(--font-mono);
+}
+
+.project-card__cat {
+  color: color-mix(in srgb, var(--accent-p) 70%, white);
+}
+
+.project-card__title {
+  font: 600 1.35rem/1.2 var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+.project-card__summary {
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: auto;
+  padding-top: 6px;
+}
+
+.tag {
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: rgba(148, 163, 184, 0.1);
+  color: var(--text);
+  font-size: 0.8125rem;
+}
+
+/* Cover ilustrasi (tanpa gambar) */
+.cover {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  transition: scale 0.6s var(--ease);
+}
+
+.cover--mock {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(110% 80% at 85% 0%, color-mix(in srgb, var(--accent-p) 50%, transparent), transparent 60%),
+    linear-gradient(160deg, #0d1430, #070b1a);
+}
+
+.cover__window {
+  position: absolute;
+  inset: 14% 10% -8%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  background: rgba(5, 5, 16, 0.78);
+  box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.7);
+}
+
+.cover__bar {
+  display: flex;
+  gap: 5px;
+  padding: 8px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.cover__bar i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.mock {
+  display: grid;
+  flex: 1;
+  gap: 8px;
+  padding: 12px;
+}
+
+.mock i {
+  display: block;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.mock--app {
+  grid-template-columns: 1fr 3fr;
+  grid-template-rows: 14px 1fr 1fr;
+}
+
+.mock--app i:first-child {
+  grid-row: 1 / -1;
+}
+
+.mock--app i:nth-child(2) {
+  background: color-mix(in srgb, var(--accent-p) 70%, transparent);
+}
+
+/* baris tile statistik + baris tabel supaya mock terasa seperti aplikasi */
+.mock--app i:nth-child(3) {
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--accent-p) 35%, transparent) 0 31%,
+    transparent 31% 34.5%,
+    rgba(255, 255, 255, 0.08) 34.5% 65.5%,
+    transparent 65.5% 69%,
+    rgba(255, 255, 255, 0.08) 69%
+  );
+}
+
+.mock--app i:nth-child(4) {
+  background: repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0 7px, transparent 7px 16px);
+}
+
+.mock--chart {
+  grid-auto-flow: column;
+  align-items: end;
+}
+
+.mock--chart i {
+  height: var(--h);
+  background: linear-gradient(
+    color-mix(in srgb, var(--accent-p) 85%, white),
+    color-mix(in srgb, var(--accent-p) 25%, transparent)
+  );
+}
+
+.mock--chat {
+  align-content: start;
+}
+
+.mock--chat i {
+  width: 62%;
+  height: 22px;
+  border-radius: 11px 11px 11px 3px;
+}
+
+.mock--chat i:nth-child(2) {
+  justify-self: end;
+  width: 48%;
+  border-radius: 11px 11px 3px 11px;
+  background: color-mix(in srgb, var(--accent-p) 70%, transparent);
+}
+
+.mock--orb {
+  place-items: center;
+}
+
+.mock--orb i {
+  width: 46%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 35% 30%,
+    #fff,
+    color-mix(in srgb, var(--accent-p) 80%, transparent) 35%,
+    transparent 70%
+  );
+  box-shadow: 0 0 60px color-mix(in srgb, var(--accent-p) 60%, transparent);
+}
+
+/* Dialog detail proyek */
+.project-dialog {
+  width: min(760px, calc(100% - 32px));
+  max-height: calc(100dvh - 32px);
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  background: var(--bg-2);
+  color: var(--text);
+  box-shadow: 0 40px 120px -20px rgba(0, 0, 0, 0.85);
+}
+
+/* Yang di-scroll isinya, bukan dialognya: tombol Tutup (absolute ke dialog) tetap di pojok */
+.project-dialog__inner {
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+.project-dialog::backdrop {
+  background: rgba(5, 5, 16, 0.72);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+.project-dialog[open] {
+  display: flex;
+  flex-direction: column;
+  animation: dialog-in 0.4s var(--ease);
+}
+
+.project-dialog[open]::backdrop {
+  animation: fade-in 0.3s ease;
+}
+
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.98);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+.project-dialog__close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: rgba(5, 5, 16, 0.7);
+  transition: background-color 0.2s var(--ease);
+}
+
+.project-dialog__close:hover {
+  background: rgba(5, 5, 16, 0.95);
+}
+
+.project-dialog .cover {
+  aspect-ratio: 21 / 9;
+}
+
+.project-dialog__body {
+  padding: clamp(20px, 4vw, 36px);
+}
+
+.project-dialog__meta {
+  display: flex;
+  gap: 8px;
+}
+
+.project-dialog h3 {
+  margin-top: 16px;
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+}
+
+.project-dialog__desc {
+  max-width: 62ch;
+  margin-top: 12px;
+  color: var(--muted);
+}
+
+.project-dialog h4 {
+  margin: 28px 0 12px;
+  font-size: 0.95rem;
+}
+
+.features {
+  display: grid;
+  gap: 10px;
+}
+
+.features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.features svg {
+  flex-shrink: 0;
+  margin-top: 4px;
+  color: var(--accent-2);
+}
+
+.project-dialog .tags {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.project-dialog__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+/* Sertifikat & penghargaan */
+.achievements {
+  display: grid;
+  gap: 48px;
+}
+
+.subhead {
+  margin-bottom: 20px;
+  font-size: 1.25rem;
+}
+
+.certs {
+  display: grid;
+  gap: 16px;
+}
+
+.cert {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  column-gap: 16px;
+  row-gap: 2px;
+  align-items: start;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--surface);
+}
+
+.cert__icon,
+.award__icon {
+  display: grid;
+  grid-row: span 3;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(44, 103, 237, 0.14);
+  color: var(--accent-3);
+}
+
+.cert__title {
+  font-weight: 600;
+}
+
+.cert__issuer {
+  grid-column: 2;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.cert__year,
+.award__year {
+  grid-row: 1;
+  grid-column: 3;
+  color: var(--muted);
+  font: 500 0.8125rem/1.6 var(--font-mono);
+}
+
+.cert__link {
+  display: inline-flex;
+  grid-column: 2;
+  align-items: center;
+  gap: 4px;
+  width: fit-content;
+  min-height: 44px;
+  color: var(--accent-3);
+  font-size: 0.9rem;
+}
+
+.cert__link:hover {
+  color: var(--accent-2);
+}
+
+.awards {
+  display: grid;
+  gap: 12px;
+}
+
+.award {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+}
+
+.award__icon {
+  grid-row: auto;
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.12);
+}
+
+.award__text {
+  display: grid;
+}
+
+.award__title {
+  font-weight: 600;
+}
+
+.award__event {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.award__year {
+  grid-row: auto;
+  grid-column: auto;
+}
+
+/* Tech stack */
+.stack {
+  display: grid;
+  gap: 16px;
+}
+
+.stack__group {
+  padding: 24px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--surface);
+}
+
+.stack__group h3 {
+  margin-bottom: 16px;
+  font-size: 1.1rem;
+}
+
+.stack__group ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.stack__group .chip {
+  color: var(--text);
+}
+
+.marquee {
+  margin-top: 56px;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+}
+
+.marquee__track {
+  display: flex;
+  width: max-content;
+  animation: marquee 40s linear infinite;
+}
+
+.marquee:hover .marquee__track {
+  animation-play-state: paused;
+}
+
+.marquee__track span {
+  padding: 0 28px;
+  color: transparent;
+  font: 600 clamp(1.5rem, 4vw, 2.75rem) / 1.3 var(--font-display);
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  -webkit-text-stroke: 1px rgba(148, 163, 184, 0.45);
+}
+
+.marquee__track span:nth-child(3n + 1) {
+  color: var(--text);
+  -webkit-text-stroke: 0;
+}
+
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* View transitions saat ganti filter/tab */
+::view-transition-group(*) {
+  animation-duration: 0.45s;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (min-width: 640px) {
+  .bento {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .bento__item--wide {
+    grid-column: span 2;
+  }
+  /* kartu terakhir mengisi sisa baris (--span-* dihitung lastSpan di Portfolio.jsx) */
+  .bento__item:last-child {
+    grid-column: span var(--span-2);
+  }
+  .stack {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .certs {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 900px) {
+  .bento {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .bento__item:last-child {
+    grid-column: span var(--span-3);
+  }
+  /* Kartu unggulan: cover di kiri, teks di kanan */
+  .bento__item--wide .project-card {
+    flex-direction: row;
+  }
+  .bento__item--wide .project-card__media {
+    flex: 1.35;
+  }
+  .bento__item--wide .cover {
+    height: 100%;
+    aspect-ratio: auto;
+    min-height: 320px;
+  }
+  .bento__item--wide .project-card__body {
+    flex: 1;
+    justify-content: center;
+    padding: 32px;
+  }
+  .bento__item--wide .project-card__title {
+    font-size: 1.75rem;
+  }
+  .stack {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .achievements {
+    grid-template-columns: 1.4fr 1fr;
+    align-items: start;
+  }
+  .certs {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee__track {
+    animation: none;
+  }
+}

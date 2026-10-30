@@ -1,0 +1,134 @@
+.contact {
+  background: radial-gradient(60% 45% at 50% 100%, rgba(44, 103, 237, 0.16), transparent 70%);
+}
+
+.contact__headline {
+  max-width: 14ch;
+  font: 700 clamp(2.4rem, 7vw, 5rem) / 1.02 var(--font-display);
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+.contact__mail {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+  margin-top: 40px;
+}
+
+.contact__email {
+  min-width: 0;
+  padding-block: 10px; /* area sentuh ≥ 44px */
+  font: 600 clamp(1.25rem, 3.5vw, 2.25rem) / 1.25 var(--font-display);
+  letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
+  text-decoration: underline 2px;
+  text-decoration-color: rgba(96, 165, 250, 0.4);
+  text-underline-offset: 8px;
+  transition: text-decoration-color 0.2s var(--ease);
+}
+
+.contact__email:hover {
+  text-decoration-color: var(--accent-2);
+}
+
+.contact__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.contact__socials {
+  display: grid;
+  gap: 12px;
+  margin-top: 56px;
+}
+
+.social {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 72px;
+  padding: 0 20px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  transition:
+    border-color 0.2s var(--ease),
+    background-color 0.2s var(--ease);
+}
+
+.social:hover {
+  border-color: var(--border-strong);
+  background: var(--surface);
+}
+
+.social__name {
+  font-weight: 600;
+}
+
+.social__arrow {
+  margin-left: auto;
+  color: var(--muted);
+  transition:
+    transform 0.2s var(--ease),
+    color 0.2s var(--ease);
+}
+
+.social:hover .social__arrow {
+  color: var(--accent-2);
+  transform: translate(3px, -3px);
+}
+
+.contact__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 28px;
+  margin-top: 32px;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.contact__meta > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.contact__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22c55e;
+}
+
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  z-index: 70;
+  padding: 12px 18px;
+  border-radius: 12px;
+  background: var(--text);
+  color: var(--bg);
+  font-size: 0.95rem;
+  font-weight: 600;
+  opacity: 0;
+  translate: -50% 12px;
+  transition:
+    opacity 0.25s var(--ease),
+    translate 0.25s var(--ease);
+  pointer-events: none;
+}
+
+.toast:not(:empty) {
+  opacity: 1;
+  translate: -50% 0;
+}
+
+@media (min-width: 640px) {
+  .contact__socials {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

@@ -1,0 +1,141 @@
+.navbar {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 50;
+}
+
+/* Glass dipasang di ::before: backdrop-filter di header sendiri akan menjadi
+   containing block untuk overlay menu (position: fixed) di HP. */
+.navbar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0;
+  border-bottom: 1px solid var(--border);
+  background: rgba(5, 5, 16, 0.62);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  backdrop-filter: blur(14px) saturate(140%);
+  transition: opacity 0.3s var(--ease);
+}
+
+.navbar[data-scrolled='true']::before,
+.menu-open .navbar::before {
+  opacity: 1;
+}
+
+.navbar__inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 72px;
+}
+
+.navbar__brand {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-right: auto;
+}
+
+.navbar__nav ul {
+  display: flex;
+  gap: 4px;
+}
+
+.navbar__nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 10px;
+  color: var(--muted);
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition:
+    color 0.2s var(--ease),
+    background-color 0.2s var(--ease);
+}
+
+.navbar__nav a:hover {
+  color: var(--text);
+}
+
+.navbar__nav a[aria-current='true'] {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+}
+
+.navbar__cta {
+  min-height: 44px;
+  padding: 0 18px;
+}
+
+.navbar__toggle {
+  display: none;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+@media (max-width: 899px) {
+  .navbar__toggle {
+    display: grid;
+  }
+
+  .navbar__nav {
+    position: fixed;
+    inset: 72px 0 0;
+    padding: 32px var(--gutter);
+    background: var(--bg);
+    opacity: 0;
+    visibility: hidden;
+    /* tutup: sembunyikan setelah fade-out selesai */
+    transition:
+      opacity 0.3s var(--ease),
+      visibility 0s 0.3s;
+  }
+
+  /* buka: langsung visible supaya link pertama bisa langsung difokus */
+  .navbar__nav[data-open='true'] {
+    opacity: 1;
+    visibility: visible;
+    transition:
+      opacity 0.3s var(--ease),
+      visibility 0s;
+  }
+
+  .navbar__nav ul {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .navbar__nav li {
+    opacity: 0;
+    transform: translateY(16px);
+    transition:
+      opacity 0.5s var(--ease),
+      transform 0.5s var(--ease);
+    transition-delay: calc(var(--i) * 60ms);
+  }
+
+  .navbar__nav[data-open='true'] li {
+    opacity: 1;
+    transform: none;
+  }
+
+  .navbar__nav a {
+    min-height: 60px;
+    padding: 0;
+    color: var(--text);
+    font: 600 clamp(1.75rem, 8vw, 2.5rem) / 1 var(--font-display);
+    letter-spacing: -0.02em;
+  }
+
+  .navbar__nav a[aria-current='true'] {
+    background: none;
+    color: var(--accent-2);
+  }
+}
