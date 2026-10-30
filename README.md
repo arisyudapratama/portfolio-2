@@ -35,6 +35,7 @@ Semua isi situs (profil, proyek, sertifikat, skill, kontak) diambil dari satu fi
 - [Aksesibilitas dan dukungan browser](#aksesibilitas-dan-dukungan-browser)
 - [Troubleshooting](#troubleshooting)
 - [Kredit](#kredit)
+- [Lisensi](#lisensi)
 
 ## Fitur
 
@@ -506,6 +507,10 @@ Beberapa fitur di template ini masih baru, jadi dipakai sebagai tambahan saja. K
 ## Kredit
 
 Font [Space Grotesk](https://fonts.google.com/specimen/Space+Grotesk), [Plus Jakarta Sans](https://fonts.google.com/specimen/Plus+Jakarta+Sans), dan [JetBrains Mono](https://www.jetbrains.com/lp/mono/) memakai lisensi [SIL Open Font License 1.1](https://openfontlicense.org). Salinan lisensinya ada di `public/fonts/`.
+
+## Lisensi
+
+Kode di repo ini dirilis di bawah [MIT License](LICENSE). Font di `public/fonts/` tidak termasuk dan tetap memakai lisensi SIL OFL 1.1 (lihat [Kredit](#kredit)).
 
 ---
 
