@@ -15,7 +15,7 @@ export const profile = {
   location: 'Surabaya, Indonesia',
   available: true,
   photo: '', // mis. '/foto.webp' (taruh file di folder public/)
-  email: 'halo@example.com',
+  email: 'arisyudapratama1@gmail.com',
   whatsapp: '', // nomor dengan kode negara, mis. '+62 812-3456-7890'; kosong = tombol disembunyikan
   now: [
     { label: 'Sedang belajar', value: 'Shader GLSL dan animasi berbasis scroll' },
@@ -35,8 +35,8 @@ export const nav = [
 // icon: 'github' | 'instagram' | 'whatsapp'; nama lain memakai ikon tautan umum.
 export const socials = [
   { name: 'GitHub', url: 'https://github.com/arisyudapratama', icon: 'github' },
-  { name: 'LinkedIn', url: 'https://www.linkedin.com/in/username', icon: 'linkedin' },
-  { name: 'Instagram', url: 'https://www.instagram.com/username', icon: 'instagram' },
+  { name: 'LinkedIn', url: 'https://www.linkedin.com/in/arisyudapratama', icon: 'linkedin' },
+  { name: 'Instagram', url: 'https://www.instagram.com/arysuda1', icon: 'instagram' },
 ]
 
 export const education = [
